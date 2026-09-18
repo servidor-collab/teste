@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
@@ -20,15 +21,29 @@
       box-sizing: border-box;
     }
 
+    html,
     body {
       margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
       font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
       background: var(--bg);
       color: var(--text);
-      height: 100vh;
+
+      min-height: 100dvh;
+
       display: flex;
       flex-direction: column;
     }
+
+    /* ==========================================================
+       CABEÇALHO
+       ========================================================== */
 
     header {
       padding: 16px 20px;
@@ -36,15 +51,28 @@
       font-weight: 600;
       font-size: 18px;
       border-bottom: 1px solid #334155;
+
+      flex-shrink: 0;
     }
+
+    /* ==========================================================
+       CHAT
+       ========================================================== */
 
     #chat {
       flex: 1;
+      min-height: 0;
+
       overflow-y: auto;
+      overflow-x: hidden;
+
       padding: 20px;
+
       display: flex;
       flex-direction: column;
       gap: 12px;
+
+      width: 100%;
     }
 
     .msg {
@@ -52,8 +80,10 @@
       padding: 12px 16px;
       border-radius: 14px;
       line-height: 1.45;
+
       white-space: pre-wrap;
-      word-wrap: break-word;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
 
     .user {
@@ -69,23 +99,45 @@
       border-bottom-left-radius: 4px;
     }
 
+    /* ==========================================================
+       RODAPÉ
+       ========================================================== */
+
     footer {
       padding: 12px 20px;
+
       background: var(--panel);
       border-top: 1px solid #334155;
+
       display: flex;
       align-items: center;
       gap: 10px;
+
+      width: 100%;
+
+      flex-shrink: 0;
     }
+
+    /* ==========================================================
+       CAMPO DE TEXTO
+       ========================================================== */
 
     #textInput {
       flex: 1;
+      min-width: 0;
+
+      width: 100%;
+
       background: #0f172a;
       border: 1px solid #334155;
+
       color: var(--text);
+
       padding: 12px 16px;
       border-radius: 8px;
+
       outline: none;
+
       font-size: 15px;
     }
 
@@ -93,32 +145,60 @@
       border-color: var(--accent);
     }
 
+    #textInput:disabled {
+      opacity: 0.6;
+    }
+
+    /* ==========================================================
+       BOTÃO ENVIAR
+       ========================================================== */
+
     .btn {
       background: var(--accent);
       color: #fff;
+
       border: none;
+
       padding: 12px 18px;
+
       border-radius: 8px;
+
       cursor: pointer;
+
       font-weight: 600;
+
+      flex-shrink: 0;
+
+      white-space: nowrap;
     }
 
     .btn:hover {
       opacity: 0.9;
     }
 
+    /* ==========================================================
+       BOTÃO MICROFONE
+       ========================================================== */
+
     #recBtn {
       width: 48px;
       height: 48px;
+
       border-radius: 50%;
+
       border: none;
+
       background: var(--accent);
       color: #fff;
+
       font-size: 20px;
+
       cursor: pointer;
+
       display: flex;
       align-items: center;
       justify-content: center;
+
       flex-shrink: 0;
     }
 
@@ -133,6 +213,7 @@
     }
 
     @keyframes pulse {
+
       0% {
         box-shadow: 0 0 0 0 rgba(239, 68, 68, .6);
       }
@@ -144,14 +225,113 @@
       100% {
         box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
       }
+
     }
+
+    /* ==========================================================
+       STATUS
+       ========================================================== */
 
     #status {
       font-size: 13px;
       color: var(--muted);
       margin-top: 4px;
     }
+
+    /* ==========================================================
+       RESPONSIVIDADE — CELULAR
+       ========================================================== */
+
+    @media (max-width: 600px) {
+
+      header {
+        padding: 12px 14px;
+        font-size: 15px;
+      }
+
+      #chat {
+        padding: 12px;
+        gap: 10px;
+      }
+
+      .msg {
+        max-width: 92%;
+        padding: 10px 13px;
+        font-size: 14px;
+      }
+
+      footer {
+        padding: 10px;
+        gap: 7px;
+
+        /* Permite que o conteúdo se adapte */
+        width: 100%;
+      }
+
+      #textInput {
+        min-width: 0;
+        width: auto;
+
+        padding: 11px 12px;
+
+        font-size: 16px;
+      }
+
+      .btn {
+        padding: 11px 13px;
+        font-size: 14px;
+      }
+
+      #recBtn {
+        width: 44px;
+        height: 44px;
+
+        font-size: 18px;
+      }
+    }
+
+    /* ==========================================================
+       CELULARES MUITO PEQUENOS
+       ========================================================== */
+
+    @media (max-width: 400px) {
+
+      header {
+        font-size: 14px;
+      }
+
+      #chat {
+        padding: 10px;
+      }
+
+      .msg {
+        max-width: 95%;
+        font-size: 14px;
+      }
+
+      footer {
+        padding: 8px;
+        gap: 5px;
+      }
+
+      #textInput {
+        padding: 10px;
+        font-size: 16px;
+      }
+
+      .btn {
+        padding: 10px 11px;
+        font-size: 13px;
+      }
+
+      #recBtn {
+        width: 42px;
+        height: 42px;
+      }
+    }
+
   </style>
+
 </head>
 
 <body>
@@ -164,31 +344,33 @@
 
   <footer>
 
-    <input
-      id="textInput"
-      type="text"
-      placeholder="Digite sua resposta..."
-      autocomplete="off"
-    />
+```
+<input
+  id="textInput"
+  type="text"
+  placeholder="Digite sua resposta..."
+  autocomplete="off"
+/>
 
-    <button id="sendBtn" class="btn">
-      Enviar
-    </button>
+<button id="sendBtn" class="btn">
+  Enviar
+</button>
 
-    <button
-      id="recBtn"
-      title="Gravar áudio"
-      disabled
-    >
-      🎤
-    </button>
+<button
+  id="recBtn"
+  title="Gravar áudio"
+  disabled
+>
+  🎤
+</button>
 
-    <input
-      id="fileInput"
-      type="file"
-      accept="audio/*"
-      style="display:none"
-    />
+<input
+  id="fileInput"
+  type="file"
+  accept="audio/*"
+  style="display:none"
+/>
+```
 
   </footer>
 
@@ -375,11 +557,6 @@
 
     switch (currentStep) {
 
-
-      // --------------------------------------------------------
-      // NOME
-      // --------------------------------------------------------
-
       case 'NAME':
 
         ticketData.nome = text;
@@ -394,10 +571,6 @@
         break;
 
 
-      // --------------------------------------------------------
-      // E-MAIL
-      // --------------------------------------------------------
-
       case 'EMAIL':
 
         ticketData.email = text;
@@ -406,10 +579,6 @@
 
         break;
 
-
-      // --------------------------------------------------------
-      // LOCAL
-      // --------------------------------------------------------
 
       case 'LOCAL':
 
@@ -442,10 +611,6 @@
         break;
 
 
-      // --------------------------------------------------------
-      // CONFIRMAÇÃO LOCAL
-      // --------------------------------------------------------
-
       case 'LOCAL_CONFIRM':
 
         if (text === '1') {
@@ -466,10 +631,6 @@
 
         break;
 
-
-      // --------------------------------------------------------
-      // PAVIMENTO
-      // --------------------------------------------------------
 
       case 'PAVIMENTO':
 
@@ -502,10 +663,6 @@
         break;
 
 
-      // --------------------------------------------------------
-      // CONFIRMAÇÃO PAVIMENTO
-      // --------------------------------------------------------
-
       case 'PAVIMENTO_CONFIRM':
 
         if (text === '1') {
@@ -526,10 +683,6 @@
 
         break;
 
-
-      // --------------------------------------------------------
-      // PRIORIDADE
-      // --------------------------------------------------------
 
       case 'PRIORIDADE':
 
@@ -561,10 +714,6 @@
         break;
 
 
-      // --------------------------------------------------------
-      // CONFIRMAÇÃO PRIORIDADE
-      // --------------------------------------------------------
-
       case 'PRIORIDADE_CONFIRM':
 
         if (text === '1') {
@@ -586,10 +735,6 @@
         break;
 
 
-      // --------------------------------------------------------
-      // TIPO DE ATENDIMENTO
-      // --------------------------------------------------------
-
       case 'TIPO_ATENDIMENTO':
 
         const tipoIdx = parseInt(text) - 1;
@@ -603,7 +748,6 @@
           const tipoSelecionado =
             TIPOS_ATENDIMENTO[tipoIdx];
 
-          // Caso seja "Outro"
           if (tipoSelecionado === "Outro") {
 
             ticketData.tipoAtendimento = null;
@@ -647,10 +791,6 @@
         break;
 
 
-      // --------------------------------------------------------
-      // TIPO DE ATENDIMENTO — OUTRO
-      // --------------------------------------------------------
-
       case 'TIPO_ATENDIMENTO_OUTRO':
 
         ticketData.tipoAtendimento = text;
@@ -668,10 +808,6 @@
 
         break;
 
-
-      // --------------------------------------------------------
-      // CONFIRMAÇÃO TIPO DE ATENDIMENTO
-      // --------------------------------------------------------
 
       case 'TIPO_ATENDIMENTO_CONFIRM':
 
@@ -694,10 +830,6 @@
         break;
 
 
-      // --------------------------------------------------------
-      // CONFIRMAÇÃO DO ÁUDIO
-      // --------------------------------------------------------
-
       case 'AUDIO_CONFIRM':
 
         if (text === '1') {
@@ -718,10 +850,6 @@
 
         break;
 
-
-      // --------------------------------------------------------
-      // CONFIRMAÇÃO FINAL
-      // --------------------------------------------------------
 
       case 'FINAL_CONFIRM':
 
@@ -825,7 +953,7 @@
 
 
   // ============================================================
-  // PERGUNTAR DESCRIÇÃO / ÁUDIO
+  // PERGUNTAR ÁUDIO
   // ============================================================
 
   function askAudio() {
@@ -989,35 +1117,20 @@
       'bot'
     );
 
-
-    // ----------------------------------------------------------
-    // DATA E HORA DA ABERTURA
-    // ----------------------------------------------------------
-
     const agora = new Date();
 
-    // Data no formato brasileiro
     ticketData.dataAbertura =
       agora.toLocaleDateString('pt-BR');
 
-    // Hora no formato brasileiro
     ticketData.horaAbertura =
       agora.toLocaleTimeString('pt-BR');
 
-    // Data e hora completa em formato ISO
     ticketData.dataHoraAbertura =
       agora.toISOString();
-
-
-    // ----------------------------------------------------------
-    // MONTAGEM DO FORM DATA
-    // ----------------------------------------------------------
 
     const formData =
       new FormData();
 
-
-    // Adiciona o áudio
     if (lastAudioBlob) {
 
       formData.append(
@@ -1027,17 +1140,10 @@
       );
     }
 
-
-    // Adiciona o JSON
     formData.append(
       'data',
       JSON.stringify(ticketData)
     );
-
-
-    // ----------------------------------------------------------
-    // ENVIO PARA O N8N
-    // ----------------------------------------------------------
 
     try {
 
@@ -1058,7 +1164,6 @@
           }
         );
 
-
       if (!res.ok) {
 
         throw new Error(
@@ -1067,18 +1172,15 @@
 
       }
 
-
       addMessage(
         "✅ Chamado aberto com sucesso!",
         'bot'
       );
 
-
       setTimeout(
         startFlow,
         2500
       );
-
 
     } catch (err) {
 
