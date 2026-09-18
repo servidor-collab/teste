@@ -358,7 +358,7 @@
 
     const formData = new FormData();
     if (lastAudioBlob) {
-      formData.append('audio', lastAudioBlob, 'descricao_problema.webm');
+      formData.append('data', lastAudioBlob, 'descricao_problema.webm');
     }
     formData.append('data', JSON.stringify(ticketData));
 
