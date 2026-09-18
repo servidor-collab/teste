@@ -601,9 +601,10 @@
           tipoIdx < TIPOS_ATENDIMENTO.length
         ) {
 
-          const tipoSelecionado = TIPOS_ATENDIMENTO[tipoIdx];
+          const tipoSelecionado =
+            TIPOS_ATENDIMENTO[tipoIdx];
 
-          // Caso o usuário selecione "Outro"
+          // Caso seja "Outro"
           if (tipoSelecionado === "Outro") {
 
             ticketData.tipoAtendimento = null;
@@ -614,20 +615,25 @@
             );
 
             textInput.disabled = false;
-            textInput.placeholder = "Digite o tipo de atendimento...";
 
-            currentStep = 'TIPO_ATENDIMENTO_OUTRO';
+            textInput.placeholder =
+              "Digite o tipo de atendimento...";
+
+            currentStep =
+              'TIPO_ATENDIMENTO_OUTRO';
 
           } else {
 
-            ticketData.tipoAtendimento = tipoSelecionado;
+            ticketData.tipoAtendimento =
+              tipoSelecionado;
 
             addMessage(
               `Você selecionou: ${ticketData.tipoAtendimento}\nDeseja prosseguir ou ajustar?\n1 – Prosseguir\n2 – Ajustar`,
               'bot'
             );
 
-            currentStep = 'TIPO_ATENDIMENTO_CONFIRM';
+            currentStep =
+              'TIPO_ATENDIMENTO_CONFIRM';
           }
 
         } else {
@@ -655,9 +661,11 @@
           'bot'
         );
 
-        textInput.placeholder = "Digite 1 para Prosseguir ou 2 para Ajustar...";
+        textInput.placeholder =
+          "Digite 1 para Prosseguir ou 2 para Ajustar...";
 
-        currentStep = 'TIPO_ATENDIMENTO_CONFIRM';
+        currentStep =
+          'TIPO_ATENDIMENTO_CONFIRM';
 
         break;
 
@@ -729,7 +737,10 @@
             'bot'
           );
 
-          setTimeout(startFlow, 1000);
+          setTimeout(
+            startFlow,
+            1000
+          );
 
         } else {
 
@@ -799,7 +810,8 @@
 
     textInput.disabled = false;
 
-    textInput.placeholder = "Digite o número da opção...";
+    textInput.placeholder =
+      "Digite o número da opção...";
 
     addMessage(
       "Agora precisamos identificar o tipo da solicitação.\n\n" +
@@ -808,7 +820,8 @@
       'bot'
     );
 
-    currentStep = 'TIPO_ATENDIMENTO';
+    currentStep =
+      'TIPO_ATENDIMENTO';
   }
 
 
@@ -830,7 +843,8 @@
       'bot'
     );
 
-    currentStep = 'AUDIO_RECORD';
+    currentStep =
+      'AUDIO_RECORD';
   }
 
 
@@ -845,7 +859,8 @@
       'bot'
     );
 
-    currentStep = 'FINAL_CONFIRM';
+    currentStep =
+      'FINAL_CONFIRM';
   }
 
 
@@ -877,7 +892,9 @@
 
       mediaRecorder.onstop = () => {
 
-        stream.getTracks().forEach(t => t.stop());
+        stream.getTracks().forEach(
+          t => t.stop()
+        );
 
         lastAudioBlob =
           new Blob(
@@ -896,7 +913,9 @@
 
       recording = true;
 
-      recBtn.classList.add('recording');
+      recBtn.classList.add(
+        'recording'
+      );
 
       recBtn.textContent = '⏹';
 
@@ -923,7 +942,9 @@
 
       recording = false;
 
-      recBtn.classList.remove('recording');
+      recBtn.classList.remove(
+        'recording'
+      );
 
       recBtn.textContent = '🎤';
     }
@@ -953,7 +974,8 @@
     textInput.placeholder =
       "Digite 1 para Prosseguir ou 2 para Ajustar...";
 
-    currentStep = 'AUDIO_CONFIRM';
+    currentStep =
+      'AUDIO_CONFIRM';
   }
 
 
@@ -968,8 +990,35 @@
       'bot'
     );
 
-    const formData = new FormData();
 
+    // ----------------------------------------------------------
+    // DATA E HORA DA ABERTURA
+    // ----------------------------------------------------------
+
+    const agora = new Date();
+
+    // Data no formato brasileiro
+    ticketData.dataAbertura =
+      agora.toLocaleDateString('pt-BR');
+
+    // Hora no formato brasileiro
+    ticketData.horaAbertura =
+      agora.toLocaleTimeString('pt-BR');
+
+    // Data e hora completa em formato ISO
+    ticketData.dataHoraAbertura =
+      agora.toISOString();
+
+
+    // ----------------------------------------------------------
+    // MONTAGEM DO FORM DATA
+    // ----------------------------------------------------------
+
+    const formData =
+      new FormData();
+
+
+    // Adiciona o áudio
     if (lastAudioBlob) {
 
       formData.append(
@@ -979,42 +1028,58 @@
       );
     }
 
+
+    // Adiciona o JSON
     formData.append(
       'data',
       JSON.stringify(ticketData)
     );
 
+
+    // ----------------------------------------------------------
+    // ENVIO PARA O N8N
+    // ----------------------------------------------------------
+
     try {
 
-      const res = await fetch(
-        TRANSCRIBE_URL,
-        {
-          method: 'POST',
+      const res =
+        await fetch(
+          TRANSCRIBE_URL,
+          {
+            method: 'POST',
 
-          headers: {
-            'X-Ticket-JSON':
-              JSON.stringify(ticketData)
-          },
+            headers: {
 
-          body: formData
-        }
-      );
+              'X-Ticket-JSON':
+                JSON.stringify(ticketData)
+
+            },
+
+            body: formData
+          }
+        );
+
 
       if (!res.ok) {
+
         throw new Error(
           'HTTP ' + res.status
         );
+
       }
+
 
       addMessage(
         "✅ Chamado aberto com sucesso!",
         'bot'
       );
 
+
       setTimeout(
         startFlow,
         2500
       );
+
 
     } catch (err) {
 
@@ -1023,6 +1088,7 @@
         err.message,
         'bot'
       );
+
     }
   }
 
@@ -1033,7 +1099,10 @@
 
   sendBtn.addEventListener(
     'click',
-    () => handleUserInput(textInput.value)
+    () =>
+      handleUserInput(
+        textInput.value
+      )
   );
 
 
@@ -1042,7 +1111,11 @@
     (e) => {
 
       if (e.key === 'Enter') {
-        handleUserInput(textInput.value);
+
+        handleUserInput(
+          textInput.value
+        );
+
       }
 
     }
