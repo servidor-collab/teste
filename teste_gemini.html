@@ -1,405 +1,1074 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Abertura de Chamados — Engenharia Aplicada Dall</title>
+
   <style>
-    :root { 
-      --bg: #0f172a; 
-      --panel: #1e293b; 
-      --accent: #6366f1; 
-      --text: #e2e8f0; 
-      --muted: #94a3b8; 
+    :root {
+      --bg: #0f172a;
+      --panel: #1e293b;
+      --accent: #6366f1;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
     }
-    * { box-sizing: border-box; }
-    body { 
-      margin: 0; 
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; 
-      background: var(--bg); 
-      color: var(--text); 
-      height: 100vh; 
-      display: flex; 
-      flex-direction: column; 
+
+    * {
+      box-sizing: border-box;
     }
-    header { 
-      padding: 16px 20px; 
-      background: var(--panel); 
-      font-weight: 600; 
-      font-size: 18px; 
-      border-bottom: 1px solid #334155; 
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
-    #chat { 
-      flex: 1; 
-      overflow-y: auto; 
-      padding: 20px; 
-      display: flex; 
-      flex-direction: column; 
-      gap: 12px; 
+
+    header {
+      padding: 16px 20px;
+      background: var(--panel);
+      font-weight: 600;
+      font-size: 18px;
+      border-bottom: 1px solid #334155;
     }
-    .msg { 
-      max-width: 85%; 
-      padding: 12px 16px; 
-      border-radius: 14px; 
-      line-height: 1.45; 
-      white-space: pre-wrap; 
-      word-wrap: break-word; 
+
+    #chat {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
-    .user { 
-      align-self: flex-end; 
-      background: var(--accent); 
-      color: #fff; 
-      border-bottom-right-radius: 4px; 
+
+    .msg {
+      max-width: 85%;
+      padding: 12px 16px;
+      border-radius: 14px;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      word-wrap: break-word;
     }
-    .bot { 
-      align-self: flex-start; 
-      background: var(--panel); 
-      border-bottom-left-radius: 4px; 
+
+    .user {
+      align-self: flex-end;
+      background: var(--accent);
+      color: #fff;
+      border-bottom-right-radius: 4px;
     }
-    footer { 
-      padding: 12px 20px; 
-      background: var(--panel); 
-      border-top: 1px solid #334155; 
-      display: flex; 
-      align-items: center; 
-      gap: 10px; 
+
+    .bot {
+      align-self: flex-start;
+      background: var(--panel);
+      border-bottom-left-radius: 4px;
     }
-    #textInput { 
-      flex: 1; 
-      background: #0f172a; 
-      border: 1px solid #334155; 
-      color: var(--text); 
-      padding: 12px 16px; 
-      border-radius: 8px; 
-      outline: none; 
-      font-size: 15px; 
+
+    footer {
+      padding: 12px 20px;
+      background: var(--panel);
+      border-top: 1px solid #334155;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    #textInput:focus { border-color: var(--accent); }
-    .btn { 
-      background: var(--accent); 
-      color: #fff; 
-      border: none; 
-      padding: 12px 18px; 
-      border-radius: 8px; 
-      cursor: pointer; 
-      font-weight: 600; 
+
+    #textInput {
+      flex: 1;
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: var(--text);
+      padding: 12px 16px;
+      border-radius: 8px;
+      outline: none;
+      font-size: 15px;
     }
-    .btn:hover { opacity: 0.9; }
-    #recBtn { 
-      width: 48px; 
-      height: 48px; 
-      border-radius: 50%; 
-      border: none; 
-      background: var(--accent); 
-      color: #fff; 
-      font-size: 20px; 
-      cursor: pointer; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      flex-shrink: 0; 
+
+    #textInput:focus {
+      border-color: var(--accent);
     }
-    #recBtn:disabled { opacity: 0.4; cursor: not-allowed; }
-    #recBtn.recording { 
-      background: #ef4444; 
-      animation: pulse 1.2s infinite; 
+
+    .btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
     }
-    @keyframes pulse { 
-      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, .6); } 
-      70% { box-shadow: 0 0 0 16px rgba(239, 68, 68, 0); } 
-      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } 
+
+    .btn:hover {
+      opacity: 0.9;
     }
-    #status { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+    #recBtn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    #recBtn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    #recBtn.recording {
+      background: #ef4444;
+      animation: pulse 1.2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, .6);
+      }
+
+      70% {
+        box-shadow: 0 0 0 16px rgba(239, 68, 68, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+      }
+    }
+
+    #status {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
   </style>
 </head>
+
 <body>
-  <header>📋 Abertura de Chamados — Engenharia Aplicada Dall</header>
+
+  <header>
+    📋 Abertura de Chamados — Engenharia Aplicada Dall
+  </header>
+
   <div id="chat"></div>
+
   <footer>
-    <input id="textInput" type="text" placeholder="Digite sua resposta..." autocomplete="off" />
-    <button id="sendBtn" class="btn">Enviar</button>
-    <button id="recBtn" title="Gravar áudio" disabled>🎤</button>
-    <input id="fileInput" type="file" accept="audio/*" style="display:none" />
+
+    <input
+      id="textInput"
+      type="text"
+      placeholder="Digite sua resposta..."
+      autocomplete="off"
+    />
+
+    <button id="sendBtn" class="btn">
+      Enviar
+    </button>
+
+    <button
+      id="recBtn"
+      title="Gravar áudio"
+      disabled
+    >
+      🎤
+    </button>
+
+    <input
+      id="fileInput"
+      type="file"
+      accept="audio/*"
+      style="display:none"
+    />
+
   </footer>
 
 <script>
-  const TRANSCRIBE_URL = 'https://dallroot.app.n8n.cloud/webhook/audio-chat-transcribe';
-  
+
+  const TRANSCRIBE_URL =
+    'https://dallroot.app.n8n.cloud/webhook/audio-chat-transcribe';
+
   const chat = document.getElementById('chat');
   const textInput = document.getElementById('textInput');
   const sendBtn = document.getElementById('sendBtn');
   const recBtn = document.getElementById('recBtn');
   const fileInput = document.getElementById('fileInput');
 
-  // Opções de Locais
-const LOCAIS = [
-  "Torre A",
-  "Torre B",
-  "Torre C",
-  "Torre D",
-  "Torre E",
-  "Torre F",
-  "Torre G",
-  "Torre H",
-  "Vestiário",
-  "Restaurante",
-  "Casinhas",
-  "Prédio Engenharia 1º Pavimento",
-  "Prédio Engenharia 2º Pavimento"
-];
 
-  // Opções de Pavimentos
-  const PAVIMENTOS = [
-    "SS2", "SS1", "Térreo", "Área comum", "Mezanino",
-    "Tipo 1", "Tipo 2", "Tipo 3", "Tipo 4", "Tipo 5",
-    "Tipo 6", "Tipo 7", "Tipo 8", "Tipo 9", "Tipo 10",
-    "Tipo 11", "Tipo 12", "Tipo 13", "Tipo 14", "Tipo 15",
-    "Tipo 16", "Tipo 17", "Tipo 18", "Tipo 19", "Tipo 20",
-    "Ático", "Cobertura", "Laje Técnica", "Não se aplica"
+  // ============================================================
+  // OPÇÕES DE LOCAIS
+  // ============================================================
+
+  const LOCAIS = [
+    "Torre A",
+    "Torre B",
+    "Torre C",
+    "Torre D",
+    "Torre E",
+    "Torre F",
+    "Torre G",
+    "Torre H",
+    "Vestiário",
+    "Restaurante",
+    "Casinhas",
+    "Prédio Engenharia 1º Pavimento",
+    "Prédio Engenharia 2º Pavimento"
   ];
 
-  // Variáveis de Estado
+
+  // ============================================================
+  // OPÇÕES DE PAVIMENTOS
+  // ============================================================
+
+  const PAVIMENTOS = [
+    "SS2",
+    "SS1",
+    "Térreo",
+    "Área comum",
+    "Mezanino",
+
+    "Tipo 1",
+    "Tipo 2",
+    "Tipo 3",
+    "Tipo 4",
+    "Tipo 5",
+
+    "Tipo 6",
+    "Tipo 7",
+    "Tipo 8",
+    "Tipo 9",
+    "Tipo 10",
+
+    "Tipo 11",
+    "Tipo 12",
+    "Tipo 13",
+    "Tipo 14",
+    "Tipo 15",
+
+    "Tipo 16",
+    "Tipo 17",
+    "Tipo 18",
+    "Tipo 19",
+    "Tipo 20",
+
+    "Ático",
+    "Cobertura",
+    "Laje Técnica",
+    "Não se aplica"
+  ];
+
+
+  // ============================================================
+  // TIPOS DE ATENDIMENTO
+  // ============================================================
+
+  const TIPOS_ATENDIMENTO = [
+    "Elétrica",
+    "Hidráulica",
+    "Estrutural/Civil",
+    "Infiltração",
+    "Limpeza",
+    "Mobiliário",
+    "Eletrodoméstico",
+    "Internet",
+    "Outro"
+  ];
+
+
+  // ============================================================
+  // VARIÁVEIS DE ESTADO
+  // ============================================================
+
   let currentStep = 'WELCOME';
+
   let ticketData = {};
+
   let lastAudioBlob = null;
-  let mediaRecorder, chunks = [], recording = false;
+
+  let mediaRecorder;
+  let chunks = [];
+  let recording = false;
+
+
+  // ============================================================
+  // ADICIONAR MENSAGEM AO CHAT
+  // ============================================================
 
   function addMessage(text, who) {
+
     const div = document.createElement('div');
+
     div.className = 'msg ' + who;
+
     div.textContent = text;
+
     chat.appendChild(div);
+
     chat.scrollTop = chat.scrollHeight;
+
     return div;
   }
 
+
+  // ============================================================
+  // RENDERIZAR LISTA DE OPÇÕES
+  // ============================================================
+
   function renderOptionsList(array) {
-    return array.map((item, index) => `${index + 1} – ${item}`).join('\n');
+
+    return array
+      .map((item, index) => `${index + 1} – ${item}`)
+      .join('\n');
   }
 
+
+  // ============================================================
+  // INICIAR FLUXO
+  // ============================================================
+
   function startFlow() {
+
     chat.innerHTML = '';
+
     ticketData = {};
+
     lastAudioBlob = null;
+
     recBtn.disabled = true;
+
     textInput.disabled = false;
+
     textInput.placeholder = "Digite aqui...";
 
-    addMessage("Olá, este é o sistema de abertura de chamados para engenharia aplicada da Dall. Vamos iniciar coletando seus dados pessoais.\n\nFavor informar seu nome completo:", 'bot');
+    addMessage(
+      "Olá, este é o sistema de abertura de chamados para engenharia aplicada da Dall. Vamos iniciar coletando seus dados pessoais.\n\nFavor informar seu nome completo:",
+      'bot'
+    );
+
     currentStep = 'NAME';
   }
 
+
+  // ============================================================
+  // TRATAMENTO DAS RESPOSTAS
+  // ============================================================
+
   function handleUserInput(input) {
+
     const text = input.trim();
+
     if (!text) return;
 
     addMessage(text, 'user');
+
     textInput.value = '';
 
+
     switch (currentStep) {
+
+
+      // --------------------------------------------------------
+      // NOME
+      // --------------------------------------------------------
+
       case 'NAME':
+
         ticketData.nome = text;
-        addMessage("Favor informar seu e-mail para receber atualizações do atendimento:", 'bot');
+
+        addMessage(
+          "Favor informar seu e-mail para receber atualizações do atendimento:",
+          'bot'
+        );
+
         currentStep = 'EMAIL';
+
         break;
+
+
+      // --------------------------------------------------------
+      // E-MAIL
+      // --------------------------------------------------------
 
       case 'EMAIL':
+
         ticketData.email = text;
+
         askLocal();
+
         break;
+
+
+      // --------------------------------------------------------
+      // LOCAL
+      // --------------------------------------------------------
 
       case 'LOCAL':
+
         const localIdx = parseInt(text) - 1;
-        if (!isNaN(localIdx) && localIdx >= 0 && localIdx < LOCAIS.length) {
+
+        if (
+          !isNaN(localIdx) &&
+          localIdx >= 0 &&
+          localIdx < LOCAIS.length
+        ) {
+
           ticketData.local = LOCAIS[localIdx];
-          addMessage(`Você selecionou: ${ticketData.local}\nDeseja prosseguir ou ajustar?\n1 – Prosseguir\n2 – Ajustar`, 'bot');
+
+          addMessage(
+            `Você selecionou: ${ticketData.local}\nDeseja prosseguir ou ajustar?\n1 – Prosseguir\n2 – Ajustar`,
+            'bot'
+          );
+
           currentStep = 'LOCAL_CONFIRM';
+
         } else {
-          addMessage(`Opção inválida. Digite um número de 1 a ${LOCAIS.length}:\n\n` + renderOptionsList(LOCAIS), 'bot');
+
+          addMessage(
+            `Opção inválida. Digite um número de 1 a ${LOCAIS.length}:\n\n` +
+            renderOptionsList(LOCAIS),
+            'bot'
+          );
         }
+
         break;
+
+
+      // --------------------------------------------------------
+      // CONFIRMAÇÃO LOCAL
+      // --------------------------------------------------------
 
       case 'LOCAL_CONFIRM':
+
         if (text === '1') {
+
           askPavimento();
+
         } else if (text === '2') {
+
           askLocal();
+
         } else {
-          addMessage("Por favor, responda com 1 para Prosseguir ou 2 para Ajustar.", 'bot');
+
+          addMessage(
+            "Por favor, responda com 1 para Prosseguir ou 2 para Ajustar.",
+            'bot'
+          );
         }
+
         break;
+
+
+      // --------------------------------------------------------
+      // PAVIMENTO
+      // --------------------------------------------------------
 
       case 'PAVIMENTO':
+
         const pavIdx = parseInt(text) - 1;
-        if (!isNaN(pavIdx) && pavIdx >= 0 && pavIdx < PAVIMENTOS.length) {
+
+        if (
+          !isNaN(pavIdx) &&
+          pavIdx >= 0 &&
+          pavIdx < PAVIMENTOS.length
+        ) {
+
           ticketData.pavimento = PAVIMENTOS[pavIdx];
-          addMessage(`Você selecionou: ${ticketData.pavimento}\nDeseja prosseguir ou ajustar?\n1 – Prosseguir\n2 – Ajustar`, 'bot');
+
+          addMessage(
+            `Você selecionou: ${ticketData.pavimento}\nDeseja prosseguir ou ajustar?\n1 – Prosseguir\n2 – Ajustar`,
+            'bot'
+          );
+
           currentStep = 'PAVIMENTO_CONFIRM';
+
         } else {
-          addMessage(`Opção inválida. Digite um número de 1 a ${PAVIMENTOS.length}:\n\n` + renderOptionsList(PAVIMENTOS), 'bot');
+
+          addMessage(
+            `Opção inválida. Digite um número de 1 a ${PAVIMENTOS.length}:\n\n` +
+            renderOptionsList(PAVIMENTOS),
+            'bot'
+          );
         }
+
         break;
+
+
+      // --------------------------------------------------------
+      // CONFIRMAÇÃO PAVIMENTO
+      // --------------------------------------------------------
 
       case 'PAVIMENTO_CONFIRM':
+
         if (text === '1') {
+
           askPrioridade();
+
         } else if (text === '2') {
+
           askPavimento();
+
         } else {
-          addMessage("Por favor, responda com 1 para Prosseguir ou 2 para Ajustar.", 'bot');
+
+          addMessage(
+            "Por favor, responda com 1 para Prosseguir ou 2 para Ajustar.",
+            'bot'
+          );
         }
+
         break;
+
+
+      // --------------------------------------------------------
+      // PRIORIDADE
+      // --------------------------------------------------------
 
       case 'PRIORIDADE':
+
         const prioVal = parseInt(text);
-        if (!isNaN(prioVal) && prioVal >= 1 && prioVal <= 5) {
+
+        if (
+          !isNaN(prioVal) &&
+          prioVal >= 1 &&
+          prioVal <= 5
+        ) {
+
           ticketData.prioridade = prioVal;
-          addMessage(`Você selecionou: Prioridade ${ticketData.prioridade}\nDeseja prosseguir ou ajustar?\n1 – Prosseguir\n2 – Ajustar`, 'bot');
+
+          addMessage(
+            `Você selecionou: Prioridade ${ticketData.prioridade}\nDeseja prosseguir ou ajustar?\n1 – Prosseguir\n2 – Ajustar`,
+            'bot'
+          );
+
           currentStep = 'PRIORIDADE_CONFIRM';
+
         } else {
-          addMessage("Por favor, informe a prioridade de 1 a 5:", 'bot');
+
+          addMessage(
+            "Por favor, informe a prioridade de 1 a 5:",
+            'bot'
+          );
         }
+
         break;
+
+
+      // --------------------------------------------------------
+      // CONFIRMAÇÃO PRIORIDADE
+      // --------------------------------------------------------
 
       case 'PRIORIDADE_CONFIRM':
+
         if (text === '1') {
-          askAudio();
+
+          askTipoAtendimento();
+
         } else if (text === '2') {
+
           askPrioridade();
+
         } else {
-          addMessage("Por favor, responda com 1 para Prosseguir ou 2 para Ajustar.", 'bot');
+
+          addMessage(
+            "Por favor, responda com 1 para Prosseguir ou 2 para Ajustar.",
+            'bot'
+          );
         }
+
         break;
+
+
+      // --------------------------------------------------------
+      // TIPO DE ATENDIMENTO
+      // --------------------------------------------------------
+
+      case 'TIPO_ATENDIMENTO':
+
+        const tipoIdx = parseInt(text) - 1;
+
+        if (
+          !isNaN(tipoIdx) &&
+          tipoIdx >= 0 &&
+          tipoIdx < TIPOS_ATENDIMENTO.length
+        ) {
+
+          const tipoSelecionado = TIPOS_ATENDIMENTO[tipoIdx];
+
+          // Caso o usuário selecione "Outro"
+          if (tipoSelecionado === "Outro") {
+
+            ticketData.tipoAtendimento = null;
+
+            addMessage(
+              "Você selecionou: Outro.\n\nFavor informar qual é o tipo de atendimento que precisa:",
+              'bot'
+            );
+
+            textInput.disabled = false;
+            textInput.placeholder = "Digite o tipo de atendimento...";
+
+            currentStep = 'TIPO_ATENDIMENTO_OUTRO';
+
+          } else {
+
+            ticketData.tipoAtendimento = tipoSelecionado;
+
+            addMessage(
+              `Você selecionou: ${ticketData.tipoAtendimento}\nDeseja prosseguir ou ajustar?\n1 – Prosseguir\n2 – Ajustar`,
+              'bot'
+            );
+
+            currentStep = 'TIPO_ATENDIMENTO_CONFIRM';
+          }
+
+        } else {
+
+          addMessage(
+            `Opção inválida. Digite um número de 1 a ${TIPOS_ATENDIMENTO.length}:\n\n` +
+            renderOptionsList(TIPOS_ATENDIMENTO),
+            'bot'
+          );
+        }
+
+        break;
+
+
+      // --------------------------------------------------------
+      // TIPO DE ATENDIMENTO — OUTRO
+      // --------------------------------------------------------
+
+      case 'TIPO_ATENDIMENTO_OUTRO':
+
+        ticketData.tipoAtendimento = text;
+
+        addMessage(
+          `Você informou: ${ticketData.tipoAtendimento}\nDeseja prosseguir ou ajustar?\n1 – Prosseguir\n2 – Ajustar`,
+          'bot'
+        );
+
+        textInput.placeholder = "Digite 1 para Prosseguir ou 2 para Ajustar...";
+
+        currentStep = 'TIPO_ATENDIMENTO_CONFIRM';
+
+        break;
+
+
+      // --------------------------------------------------------
+      // CONFIRMAÇÃO TIPO DE ATENDIMENTO
+      // --------------------------------------------------------
+
+      case 'TIPO_ATENDIMENTO_CONFIRM':
+
+        if (text === '1') {
+
+          askAudio();
+
+        } else if (text === '2') {
+
+          askTipoAtendimento();
+
+        } else {
+
+          addMessage(
+            "Por favor, responda com 1 para Prosseguir ou 2 para Ajustar.",
+            'bot'
+          );
+        }
+
+        break;
+
+
+      // --------------------------------------------------------
+      // CONFIRMAÇÃO DO ÁUDIO
+      // --------------------------------------------------------
 
       case 'AUDIO_CONFIRM':
+
         if (text === '1') {
+
           askFinalConfirmation();
+
         } else if (text === '2') {
+
           askAudio();
+
         } else {
-          addMessage("Por favor, responda com 1 para Prosseguir ou 2 para Ajustar (Regravar).", 'bot');
+
+          addMessage(
+            "Por favor, responda com 1 para Prosseguir ou 2 para Ajustar (Regravar).",
+            'bot'
+          );
         }
+
         break;
 
+
+      // --------------------------------------------------------
+      // CONFIRMAÇÃO FINAL
+      // --------------------------------------------------------
+
       case 'FINAL_CONFIRM':
+
         if (text === '1') {
+
           sendFinalRequest();
+
         } else if (text === '2') {
-          addMessage("Reiniciando o atendimento...", 'bot');
+
+          addMessage(
+            "Reiniciando o atendimento...",
+            'bot'
+          );
+
           setTimeout(startFlow, 1000);
+
         } else {
-          addMessage("Por favor, responda com 1 para Finalizar ou 2 para Refazer o pedido.", 'bot');
+
+          addMessage(
+            "Por favor, responda com 1 para Finalizar ou 2 para Refazer o pedido.",
+            'bot'
+          );
         }
+
         break;
     }
   }
 
+
+  // ============================================================
+  // PERGUNTAR LOCAL
+  // ============================================================
+
   function askLocal() {
-    addMessage("Agora vamos às informações da solicitação.\n\nFavor selecionar qual local necessita de atendimento:\n" + renderOptionsList(LOCAIS), 'bot');
+
+    addMessage(
+      "Agora vamos às informações da solicitação.\n\nFavor selecionar qual local necessita de atendimento:\n" +
+      renderOptionsList(LOCAIS),
+      'bot'
+    );
+
     currentStep = 'LOCAL';
   }
 
+
+  // ============================================================
+  // PERGUNTAR PAVIMENTO
+  // ============================================================
+
   function askPavimento() {
-    addMessage("Favor informar o pavimento:\n" + renderOptionsList(PAVIMENTOS), 'bot');
+
+    addMessage(
+      "Favor informar o pavimento:\n" +
+      renderOptionsList(PAVIMENTOS),
+      'bot'
+    );
+
     currentStep = 'PAVIMENTO';
   }
 
+
+  // ============================================================
+  // PERGUNTAR PRIORIDADE
+  // ============================================================
+
   function askPrioridade() {
-    addMessage("Favor selecionar a prioridade (de 1 a 5):", 'bot');
+
+    addMessage(
+      "Favor selecionar a prioridade (de 1 a 5):",
+      'bot'
+    );
+
     currentStep = 'PRIORIDADE';
   }
 
+
+  // ============================================================
+  // PERGUNTAR TIPO DE ATENDIMENTO
+  // ============================================================
+
+  function askTipoAtendimento() {
+
+    textInput.disabled = false;
+
+    textInput.placeholder = "Digite o número da opção...";
+
+    addMessage(
+      "Agora precisamos identificar o tipo da solicitação.\n\n" +
+      "Favor selecionar qual o tipo de atendimento que precisa:\n\n" +
+      renderOptionsList(TIPOS_ATENDIMENTO),
+      'bot'
+    );
+
+    currentStep = 'TIPO_ATENDIMENTO';
+  }
+
+
+  // ============================================================
+  // PERGUNTAR DESCRIÇÃO / ÁUDIO
+  // ============================================================
+
   function askAudio() {
+
     recBtn.disabled = false;
+
     textInput.disabled = true;
-    textInput.placeholder = "Grave o áudio usando o microfone...";
-    addMessage("Agora clique no ícone do microfone e fale de forma clara a descrição do problema.", 'bot');
+
+    textInput.placeholder =
+      "Grave o áudio usando o microfone...";
+
+    addMessage(
+      "Agora clique no ícone do microfone e fale de forma clara a descrição do problema.",
+      'bot'
+    );
+
     currentStep = 'AUDIO_RECORD';
   }
 
+
+  // ============================================================
+  // CONFIRMAÇÃO FINAL
+  // ============================================================
+
   function askFinalConfirmation() {
-    addMessage("Deseja finalizar a solicitação ou refazer o pedido?\n1 – Finalizar solicitação\n2 – Refazer pedido", 'bot');
+
+    addMessage(
+      "Deseja finalizar a solicitação ou refazer o pedido?\n1 – Finalizar solicitação\n2 – Refazer pedido",
+      'bot'
+    );
+
     currentStep = 'FINAL_CONFIRM';
   }
 
-  // Gravador de Áudio
+
+  // ============================================================
+  // GRAVAÇÃO DE ÁUDIO
+  // ============================================================
+
   async function startRecording() {
+
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorder = new MediaRecorder(stream);
+
+      const stream =
+        await navigator.mediaDevices.getUserMedia({
+          audio: true
+        });
+
+      mediaRecorder =
+        new MediaRecorder(stream);
+
       chunks = [];
-      mediaRecorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+
+      mediaRecorder.ondataavailable = e => {
+
+        if (e.data.size > 0) {
+          chunks.push(e.data);
+        }
+
+      };
+
       mediaRecorder.onstop = () => {
+
         stream.getTracks().forEach(t => t.stop());
-        lastAudioBlob = new Blob(chunks, { type: mediaRecorder.mimeType || 'audio/webm' });
+
+        lastAudioBlob =
+          new Blob(
+            chunks,
+            {
+              type:
+                mediaRecorder.mimeType ||
+                'audio/webm'
+            }
+          );
+
         onAudioRecorded();
       };
+
       mediaRecorder.start();
+
       recording = true;
+
       recBtn.classList.add('recording');
+
       recBtn.textContent = '⏹';
+
     } catch (err) {
-      addMessage('Não foi possível acessar o microfone: ' + err.message, 'bot');
+
+      addMessage(
+        'Não foi possível acessar o microfone: ' +
+        err.message,
+        'bot'
+      );
     }
   }
 
+
+  // ============================================================
+  // PARAR GRAVAÇÃO
+  // ============================================================
+
   function stopRecording() {
+
     if (mediaRecorder && recording) {
+
       mediaRecorder.stop();
+
       recording = false;
+
       recBtn.classList.remove('recording');
+
       recBtn.textContent = '🎤';
     }
   }
 
+
+  // ============================================================
+  // ÁUDIO GRAVADO
+  // ============================================================
+
   function onAudioRecorded() {
-    addMessage("🎵 Áudio gravado com sucesso!", 'user');
-    addMessage("Você gravou a descrição do problema. Deseja prosseguir ou ajustar?\n1 – Prosseguir\n2 – Ajustar (Gravar novamente)", 'bot');
+
+    addMessage(
+      "🎵 Áudio gravado com sucesso!",
+      'user'
+    );
+
+    addMessage(
+      "Você gravou a descrição do problema. Deseja prosseguir ou ajustar?\n1 – Prosseguir\n2 – Ajustar (Gravar novamente)",
+      'bot'
+    );
+
     textInput.disabled = false;
+
     recBtn.disabled = true;
-    textInput.placeholder = "Digite 1 para Prosseguir ou 2 para Ajustar...";
+
+    textInput.placeholder =
+      "Digite 1 para Prosseguir ou 2 para Ajustar...";
+
     currentStep = 'AUDIO_CONFIRM';
   }
 
+
+  // ============================================================
+  // ENVIO FINAL PARA O N8N
+  // ============================================================
+
   async function sendFinalRequest() {
-    addMessage("Enviando solicitação...", 'bot');
+
+    addMessage(
+      "Enviando solicitação...",
+      'bot'
+    );
 
     const formData = new FormData();
+
     if (lastAudioBlob) {
-      formData.append('data', lastAudioBlob, 'descricao_problema.webm');
+
+      formData.append(
+        'data',
+        lastAudioBlob,
+        'descricao_problema.webm'
+      );
     }
-    formData.append('data', JSON.stringify(ticketData));
+
+    formData.append(
+      'data',
+      JSON.stringify(ticketData)
+    );
 
     try {
-      const res = await fetch(TRANSCRIBE_URL, {
-        method: 'POST',
-        headers: {
-          'X-Ticket-JSON': JSON.stringify(ticketData)
-        },
-        body: formData
-      });
 
-      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const res = await fetch(
+        TRANSCRIBE_URL,
+        {
+          method: 'POST',
 
-      addMessage("✅ Chamado aberto com sucesso!", 'bot');
-      setTimeout(startFlow, 2500);
+          headers: {
+            'X-Ticket-JSON':
+              JSON.stringify(ticketData)
+          },
+
+          body: formData
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error(
+          'HTTP ' + res.status
+        );
+      }
+
+      addMessage(
+        "✅ Chamado aberto com sucesso!",
+        'bot'
+      );
+
+      setTimeout(
+        startFlow,
+        2500
+      );
+
     } catch (err) {
-      addMessage("Erro ao enviar chamado: " + err.message, 'bot');
+
+      addMessage(
+        "Erro ao enviar chamado: " +
+        err.message,
+        'bot'
+      );
     }
   }
 
-  // Event Listeners
-  sendBtn.addEventListener('click', () => handleUserInput(textInput.value));
-  textInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') handleUserInput(textInput.value);
-  });
 
-  recBtn.addEventListener('click', () => {
-    recording ? stopRecording() : startRecording();
-  });
+  // ============================================================
+  // EVENT LISTENERS
+  // ============================================================
 
-  // Inicialização
+  sendBtn.addEventListener(
+    'click',
+    () => handleUserInput(textInput.value)
+  );
+
+
+  textInput.addEventListener(
+    'keydown',
+    (e) => {
+
+      if (e.key === 'Enter') {
+        handleUserInput(textInput.value);
+      }
+
+    }
+  );
+
+
+  recBtn.addEventListener(
+    'click',
+    () => {
+
+      recording
+        ? stopRecording()
+        : startRecording();
+
+    }
+  );
+
+
+  // ============================================================
+  // INICIALIZAÇÃO
+  // ============================================================
+
   startFlow();
+
 </script>
+
 </body>
 </html>
+```
